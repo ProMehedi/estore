@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { TouchableNativeFeedback, TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../../constants/Colors';
-import ProductRating from './ProductRating';
 
 const ProductItem = props => {
   const TouchAble = Platform.OS === 'android' && Platform.Version <= 21 ? TouchableOpacity : TouchableNativeFeedback;
@@ -20,7 +19,6 @@ const ProductItem = props => {
           <View style={styles.metaContainer}>
             <Text style={styles.title}>{props.title}</Text>
             <Text style={styles.price}>${props.price.toFixed(2)}</Text>
-            <ProductRating rating={1} />
             <View style={styles.btns}>
               <Button color={Colors.primary} title="View Details" onPress={props.onViewDetails} />
               <Button color={Colors.primary} title="Add to Cart" onPress={props.onAddToCart} />
