@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
 import * as CartAction from '../store/actions/CartAction';
-import { Ionicons } from '@expo/vector-icons';
 
 const ProductOverviewScreen = props => {
   const products = useSelector(state => state.products.availableProducts);
@@ -40,6 +39,17 @@ const ProductOverviewScreen = props => {
 ProductOverviewScreen.navigationOptions = navData => {
   return {
     headerTitle: 'All Products',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Menu'
+          iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+          onPress={() => {
+            navData.navigation.toggleDrawer()
+          }}
+        />
+      </HeaderButtons>
+    ),
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
@@ -50,15 +60,7 @@ ProductOverviewScreen.navigationOptions = navData => {
           }}
         />
       </HeaderButtons>
-    ),
-    // headerLeft: () => (
-    //   <View style={{paddingLeft: 20}}>
-    //     <Button
-    //       title="oi"
-    //       color="black"
-    //     />
-    //   </View>
-    // )
+    )
   }
 }
 
