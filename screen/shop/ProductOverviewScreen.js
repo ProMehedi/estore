@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Platform, View } from 'react-native';
+import { Platform } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,10 +13,11 @@ const ProductOverviewScreen = props => {
 
   return (
     <FlatList
-      // numColumns={6}
-      data={products}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
+    data={products}
+    keyExtractor={item => item.id}
+    contentContainerStyle={{padding: 5}}
+    numColumns={2}
+    renderItem={itemData => (
         <ProductItem
           image={itemData.item.imageUrl}
           title={itemData.item.title}

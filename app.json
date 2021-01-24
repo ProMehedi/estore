@@ -10,6 +10,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "privacy": "unlisted",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -28,6 +29,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "This is a practice app to learn React Native."
+    "description": "This is a practice app to learn React Native.",
+    "githubUrl": "https://github.com/ProMehedi/estore"
   }
 }
