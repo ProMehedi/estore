@@ -14,7 +14,7 @@ const CartItem = props => {
         </View>
         <Text style={styles.amount}>${props.amount.toFixed(2)}</Text>
       </View>
-      <TouchableOpacity
+      {props.deletable && <TouchableOpacity
         styles={styles.delBtn}
         onPress={props.onRemove}
       >
@@ -23,7 +23,7 @@ const CartItem = props => {
           size={23}
           color='red'
         />
-      </TouchableOpacity>
+      </TouchableOpacity>}
     </View>
   );
 }
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   products: {
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: '#ddd',
     flexDirection: 'row',
@@ -50,12 +49,12 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontFamily: 'open-sans',
-    fontSize: 15,
+    fontSize: 13,
     color: Colors.primary
   },
   title: {
     fontFamily: 'open-sans-bold',
-    fontSize: 15
+    fontSize: 14
   },
   delBtn: {
 
