@@ -11,6 +11,9 @@ import * as ProductsAction from '../store/actions/ProductsAction';
 const UserProductsScreen = props => {
   const userProducts = useSelector(state => state.products.userProducts);
   const displatch = useDispatch();
+  const editProductHandler = (id) => {
+    props.navigation.navigate('EditProduct', {productId: id});
+  }
 
   return (
     <FlatList
@@ -22,14 +25,16 @@ const UserProductsScreen = props => {
           title={itemData.item.title}
           price={itemData.item.price}
           image={itemData.item.imageUrl}
-          onSelect={() => {}}
+          onSelect={() => {
+            editProductHandler(itemData.item.id);
+          }}
         >
           <Ionicons
-            name={Platform.OS === 'android' ? 'md-add-circle-outline' : 'ios-add-circle-outline'}
+            name={Platform.OS === 'android' ? 'md-create-outline' : 'ios-create-outline'}
             size={23}
             color={Colors.primary}
             onPress={() => {
-              
+              editProductHandler(itemData.item.id);
             }}
           />
           <Ionicons
@@ -60,17 +65,17 @@ UserProductsScreen.navigationOptions = navData => {
         />
       </HeaderButtons>
     ),
-    // headerRight: () => (
-    //   <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-    //     <Item
-    //       title='Cart'
-    //       iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-    //       onPress={() => {
-    //         navData.navigation.navigate('Cart')
-    //       }}
-    //     />
-    //   </HeaderButtons>
-    // )
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Add'
+          iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+          onPress={() => {
+            navData.navigation.navigate('EditProduct')
+          }}
+        />
+      </HeaderButtons>
+    )
   }
 }
  
