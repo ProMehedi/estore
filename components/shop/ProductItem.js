@@ -9,7 +9,7 @@ const ProductItem = props => {
 
   return (
     <View style={styles.container}>
-      <TouchAble onPress={props.onViewDetails} useFoground>
+      <TouchAble onPress={props.onSelect} useFoground>
         <View>
           <View style={styles.imgContainer}>
             <Image
@@ -21,25 +21,12 @@ const ProductItem = props => {
             <Text numberOfLines={1} style={styles.title}>{props.title}</Text>
             <Text style={styles.price}>${props.price.toFixed(2)}</Text>
             <View style={styles.btns}>
-              {/* <Button color={Colors.primary} title="View Details" onPress={props.onViewDetails} /> */}
-              {/* <Button color={Colors.primary} title="Add to Cart" onPress={props.onAddToCart} /> */}
-              <Ionicons
-                name={Platform.OS === 'android' ? 'md-document-text-outline' : 'ios-document-text-outline'}
-                size={23}
-                color={Colors.primary}
-                onPress={props.onViewDetails}
-              />
-              <Ionicons
-                name={Platform.OS === 'android' ? 'md-cart-outline' : 'ios-cart-outline'}
-                size={23}
-                color={Colors.primary}
-                onPress={props.onAddToCart}
-              />
+              {props.children}
             </View>
           </View>
         </View>
       </TouchAble>
-    </View>
+    </View> 
   );
 }
 

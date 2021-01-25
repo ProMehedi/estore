@@ -4,6 +4,8 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
+import { Ionicons } from '@expo/vector-icons';
+import Colors from '../../constants/Colors';
 
 const UserProductsScreen = props => {
   const userProducts = useSelector(state => state.products.userProducts)
@@ -18,9 +20,25 @@ const UserProductsScreen = props => {
           title={itemData.item.title}
           price={itemData.item.price}
           image={itemData.item.imageUrl}
-          onViewDetail={() => {}}
-          onAddToCart={() => {}}
-        />
+          onSelect={() => {}}
+        >
+          <Ionicons
+            name={Platform.OS === 'android' ? 'md-add-circle-outline' : 'ios-add-circle-outline'}
+            size={23}
+            color={Colors.primary}
+            onPress={() => {
+              
+            }}
+          />
+          <Ionicons
+            name={Platform.OS === 'android' ? 'md-trash-outline' : 'ios-trash-outline'}
+            size={23}
+            color={Colors.primary}
+            onPress={() => {
+              
+            }}
+          />
+        </ProductItem>
       )}
     />
   );
