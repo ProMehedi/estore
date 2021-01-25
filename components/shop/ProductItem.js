@@ -24,7 +24,7 @@ const ProductItem = props => {
               {/* <Button color={Colors.primary} title="View Details" onPress={props.onViewDetails} /> */}
               {/* <Button color={Colors.primary} title="Add to Cart" onPress={props.onAddToCart} /> */}
               <Ionicons
-                name={Platform.OS === 'android' ? 'md-link' : 'ios-link'}
+                name={Platform.OS === 'android' ? 'md-document-text-outline' : 'ios-document-text-outline'}
                 size={23}
                 color={Colors.primary}
                 onPress={props.onViewDetails}

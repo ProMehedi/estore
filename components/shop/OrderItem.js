@@ -1,19 +1,21 @@
 import React from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
-import CartItem from './CartItem';
 
 const OrderItem = props => {
   return (
     <View style={styles.container}>
       <View style={styles.summery}>
-        <View style={styles.amount}>${props.amount.toFixed(2)}</View>
-        <View style={styles.date}>{props.date}</View>
+        <Text style={styles.id}>Order#: {props.id}</Text>
+        <Text style={styles.date}>{props.date}</Text>
+        <Text style={styles.amount}>Total Amount: ${props.amount.toFixed(2)}</Text>
       </View>
-      <CartItem />
-      <Button
-        title="Show Details"
+      <Ionicons
+        name={Platform.OS === 'android' ? 'md-document-text-outline' : 'ios-document-text-outline'}
+        size={23}
         color={Colors.primary}
+        onPress={props.orderDetails}
       />
     </View>
   );
@@ -28,9 +30,27 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 6,
     backgroundColor: 'white',
-    minHeight: 200,
-    margin: 15,
-    overflow: 'hidden'
+    margin: 5,
+    overflow: 'hidden',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  id: {
+    fontFamily: 'open-sans-bold',
+    fontSize: 15
+  },
+  date: {
+    fontFamily: 'open-sans',
+    color: '#888',
+    fontSize: 12
+  },
+  amount: {
+    fontSize: 14,
+    fontFamily: 'open-sans-bold',
+    color: Colors.accent,
+    marginTop: 10
   }
 })
  
