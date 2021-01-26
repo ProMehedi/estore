@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,11 +14,18 @@ const EditProductScreen = props => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
+  const [validTitle, setValidTitle] = useState(false);
   const [imgUrl, setImgUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
   const [price, setPrice] = useState('');
   const [desc, setDesc] = useState(editedProduct ? editedProduct.description : '');
 
   const submitHandler = useCallback(() => {
+    if(!validTitle) {
+      Alert.alert('Wrong input!', 'Please check the erros on the form!', [
+        {text: 'okay'}
+      ])
+      return;
+    }
     if(editedProduct) {
       dispatch(ProductsAction.updateProduct(prodId, title, desc, imgUrl));
     } else {
@@ -30,7 +37,16 @@ const EditProductScreen = props => {
   useEffect(() => {
     props.navigation.setParams({submit: submitHandler})
   }, [submitHandler])
-2
+
+  const titleChangeHandler = text => {
+    if(text.trim().length === 0) {
+      setValidTitle(false)
+    } else {
+      setValidTitle(true)
+    }
+    setTitle(text)
+  }
+
   return (
     <ScrollView>
       <View style={styles.fromWrap}>
@@ -40,9 +56,14 @@ const EditProductScreen = props => {
             style={styles.input}
             placeholder='Product Title'
             value={title}
-            onChangeText={text => setTitle(text)}
+            onChangeText={titleChangeHandler}
+            keyboardType='default'
+            autoCapitalize='sentences'
+            autoCorrect
+            returnKeyType='next'
           />
         </View>
+        {!validTitle && <Text>Please enter a valid title!</Text>}
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Image URL</Text>
           <TextInput
@@ -50,6 +71,7 @@ const EditProductScreen = props => {
             placeholder='Product Image URL'
             value={imgUrl}
             onChangeText={text => setImgUrl(text)}
+            returnKeyType='next'
           />
         </View>
         {editedProduct ? null : <View style={styles.inputGroup}>
@@ -59,6 +81,8 @@ const EditProductScreen = props => {
             placeholder='Product Price'
             value={price}
             onChangeText={text => setPrice(text)}
+            keyboardType='decimal-pad'
+            returnKeyType='next'
           />
         </View>}
         <View style={styles.inputGroup}>
