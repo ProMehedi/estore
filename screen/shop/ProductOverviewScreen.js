@@ -27,6 +27,14 @@ const ProductOverviewScreen = props => {
     setIsloading(false);
   }, [dispatch, setIsloading, setError])
 
+  // Navigation Listener
+  useEffect(() => {
+    const focusSub = props.navigation.addListener('willFocus', loadProducs);
+    return() => {
+      focusSub.remove();
+    }
+  }, [loadProducs]);
+
   useEffect(() => {
     loadProducs();
   }, [dispatch, loadProducs]);
