@@ -1,12 +1,15 @@
 import React from 'react';
-import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Button, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react/cjs/react.development';
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/Colors';
 import * as CartAction from '../../screen/store/actions/CartAction';
 import * as OrdersAction from '../../screen/store/actions/OrdersAction';
 
 const CartScreen = props => {
+  const [isLoading, setIsloading] = useState(false);
+
   const cartTotal = useSelector(state => state.cart.totalAmount);
   const cartItems = useSelector(state => {
     const transformedCartItems = [];
@@ -26,18 +29,21 @@ const CartScreen = props => {
 
   const dispatch = useDispatch();
 
+  const sendOrderHandler = async () => {
+    setIsloading(true)
+    await dispatch(OrdersAction.addOrder(cartItems, cartTotal));
+    setIsloading(false);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.summary}>
         <Text style={styles.sumTitle}>Total: <Text style={styles.totalPrice}>${cartTotal.toFixed(2)}</Text></Text>
-        <Button
+        {isLoading ? <ActivityIndicator size='small' color={Colors.primary} /> : <Button
           color={Colors.accent}
           title='Order Now'
-          onPress={() => {
-            dispatch(OrdersAction.addOrder(cartItems, cartTotal));
-            console.log('ORDER PLACED!')
-          }}
-        />
+          onPress={sendOrderHandler}
+        />}
       </View>
       <FlatList
         data={cartItems}
@@ -62,10 +68,7 @@ const CartScreen = props => {
           color={Colors.accent}
           title='Order Now'
           // disabled={cartItems.length === 0}
-          onPress={() => {
-            dispatch(OrdersAction.addOrder(cartItems, cartTotal));
-            console.log('ORDER PLACED!')
-          }}
+          onPress={sendOrderHandler}
         />
       </View>
     </View>
