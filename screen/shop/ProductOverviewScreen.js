@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Button, Platform, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Button, Platform, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,32 +12,36 @@ import Colors from '../../constants/Colors';
 
 const ProductOverviewScreen = props => {
   const [isLoading, setIsloading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState();
   const products = useSelector(state => state.products.availableProducts);
   const dispatch = useDispatch();
 
-  const loadProducs = useCallback(async () => {
+  const loadProducts = useCallback(async () => {
     setError(null);
-    setIsloading(true);
+    setIsRefreshing(true);
     try{
       await dispatch(ProductsAction.fetchProducts());
     } catch(err) {
       setError(err.message);
     }
-    setIsloading(false);
+    setIsRefreshing(false);
   }, [dispatch, setIsloading, setError])
 
   // Navigation Listener
   useEffect(() => {
-    const focusSub = props.navigation.addListener('willFocus', loadProducs);
+    const focusSub = props.navigation.addListener('willFocus', loadProducts);
     return() => {
       focusSub.remove();
     }
-  }, [loadProducs]);
+  }, [loadProducts]);
 
   useEffect(() => {
-    loadProducs();
-  }, [dispatch, loadProducs]);
+    setIsloading(true);
+    loadProducts().then(() => {
+      setIsloading(false);
+    });
+  }, [dispatch, loadProducts]);
 
   const selectItemHandler = (id, title) => {
     props.navigation.navigate('ProductDetail', {
@@ -52,7 +56,7 @@ const ProductOverviewScreen = props => {
         <Text>An error occured!!</Text>
         <Button
           title='Try Again!'
-          onPress={loadProducs}
+          onPress={loadProducts}
           color={Colors.primary}
         />
       </View>
@@ -78,6 +82,12 @@ const ProductOverviewScreen = props => {
 
   return (
     <FlatList
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={loadProducts}
+        />
+      }
       data={products}
       keyExtractor={item => item.id}
       contentContainerStyle={{padding: 5}}

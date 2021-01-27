@@ -10,9 +10,8 @@ import * as OrdersAction from '../store/actions/OrdersAction';
 
 const OrderScreen = props => {
   const [isLoading, setIsloading] = useState(false);
-
-  const dispatch = useDispatch();
   const orders = useSelector(state => state.orders.orders);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsloading(true);
