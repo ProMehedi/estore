@@ -14,7 +14,7 @@ const EditProductScreen = props => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
-  const [validTitle, setValidTitle] = useState(false);
+  const [validTitle, setValidTitle] = useState(true);
   const [imgUrl, setImgUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
   const [price, setPrice] = useState('');
   const [desc, setDesc] = useState(editedProduct ? editedProduct.description : '');
