@@ -1,12 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
+import Colors from '../../constants/Colors';
 import * as ProductsAction from '../../screen/store/actions/ProductsAction';
 
 const EditProductScreen = props => {
+  const [isLoading, setIsloading] = useState(false);
+  const [error, setError] = useState();
+
   const prodId = props.navigation.getParam('productId');
   const editedProduct = useSelector(state => 
     state.products.userProducts.find(prod => prod.id === prodId)
@@ -19,19 +23,35 @@ const EditProductScreen = props => {
   const [price, setPrice] = useState('');
   const [desc, setDesc] = useState(editedProduct ? editedProduct.description : '');
 
-  const submitHandler = useCallback(() => {
+  useEffect(() => {
+    if(error) {
+      Alert.alert('An error occurred', error, [{ text: 'Okay!' }]);
+    }
+  }, [error])
+
+  const submitHandler = useCallback(async () => {
     if(!validTitle) {
       Alert.alert('Wrong input!', 'Please check the erros on the form!', [
         {text: 'okay'}
       ])
       return;
     }
-    if(editedProduct) {
-      dispatch(ProductsAction.updateProduct(prodId, title, desc, imgUrl));
-    } else {
-      dispatch(ProductsAction.createProduct(title, desc, imgUrl, +price));
+
+    setError(null);
+    setIsloading(true);
+
+    try{
+      if(editedProduct) {
+        await dispatch(ProductsAction.updateProduct(prodId, title, desc, imgUrl));
+      } else {
+        await dispatch(ProductsAction.createProduct(title, desc, imgUrl, +price));
+      }
+      props.navigation.goBack();
+    } catch(err) {
+      setError(err.message);
     }
-    props.navigation.goBack();
+
+    setIsloading(false);
   }, [dispatch, prodId, title, desc, imgUrl, price]);
 
   useEffect(() => {
@@ -45,6 +65,14 @@ const EditProductScreen = props => {
       setValidTitle(true)
     }
     setTitle(text)
+  }
+
+  if(isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size='large' color={Colors.primary} />
+      </View>
+    )
   }
 
   return (
@@ -121,6 +149,11 @@ EditProductScreen.navigationOptions = navData => {
 }
 
 const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   fromWrap: {
     margin: 10,
     padding: 10,
