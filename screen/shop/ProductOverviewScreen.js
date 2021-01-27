@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -7,11 +7,16 @@ import ProductItem from '../../components/shop/ProductItem';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
 import { Ionicons } from '@expo/vector-icons';
 import * as CartAction from '../store/actions/CartAction';
+import * as ProductsAction from '../store/actions/ProductsAction';
 import Colors from '../../constants/Colors';
 
 const ProductOverviewScreen = props => {
   const products = useSelector(state => state.products.availableProducts);
-  const displatch = useDispatch();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(ProductsAction.fetchProducts());
+  }, [dispatch]);
 
   const selectItemHandler = (id, title) => {
     props.navigation.navigate('ProductDetail', {
@@ -48,7 +53,7 @@ const ProductOverviewScreen = props => {
             size={23}
             color={Colors.primary}
             onPress={() => {
-              displatch(CartAction.addToCart(itemData.item));
+              dispatch(CartAction.addToCart(itemData.item));
             }}
           />
         </ProductItem>
